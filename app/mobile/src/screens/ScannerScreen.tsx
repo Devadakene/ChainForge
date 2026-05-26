@@ -18,6 +18,31 @@ interface Props {
   navigation: ScannerScreenNavigationProp;
 }
 
+export const parseAidIdFromQRCode = (data: string): string | null => {
+  const trimmed = data.trim();
+
+  const deepLinkRegex = /^soter:\/\/(?:testnet\/)?package\/([^\/?#]+)(?:[\/?#].*)?$/i;
+  const deepLinkMatch = trimmed.match(deepLinkRegex);
+  if (deepLinkMatch?.[1]) {
+    return decodeURIComponent(deepLinkMatch[1]);
+  }
+
+  try {
+    const url = new URL(trimmed);
+    const hostMatches = /(^|\.)soter\.app$/i.test(url.hostname);
+    if ((url.protocol === 'https:' || url.protocol === 'http:') && hostMatches) {
+      const pathMatch = url.pathname.match(/^\/(?:testnet\/)?package\/([^\/?#]+)(?:[\/?#].*)?$/i);
+      if (pathMatch?.[1]) {
+        return decodeURIComponent(pathMatch[1]);
+      }
+    }
+  } catch {
+    // invalid URL, fall through to null
+  }
+
+  return null;
+};
+
 export const ScannerScreen: React.FC<Props> = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
@@ -35,20 +60,18 @@ export const ScannerScreen: React.FC<Props> = ({ navigation }) => {
   const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
     setScanned(true);
 
-    // Check if it's the correct format: soter://package/{id}
-    const regex = /^soter:\/\/package\/(.+)$/;
-    const match = data.match(regex);
+    const aidId = parseAidIdFromQRCode(data);
 
-    if (match && match[1]) {
-      const aidId = match[1];
+    if (aidId) {
       navigation.replace('AidDetails', { aidId });
-    } else {
-      Alert.alert(
-        'Invalid QR Code',
-        'This QR code is not a valid Soter package link. Please scan a Soter QR code.',
-        [{ text: 'Try Again', onPress: () => setScanned(false) }],
-      );
+      return;
     }
+
+    Alert.alert(
+      'Invalid QR Code',
+      'This QR code is not a valid Soter package link. Please scan a Soter QR code.',
+      [{ text: 'Try Again', onPress: () => setScanned(false) }],
+    );
   };
 
   // ── Permission: requesting ───────────────────────────────────────────────

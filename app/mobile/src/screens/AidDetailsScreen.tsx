@@ -172,8 +172,11 @@ export const AidDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
       const result = await queueClaimConfirmation(aidId, details.claimId);
 
       if (result.status === 'completed') {
-        setSyncMessage('Claim confirmation submitted.');
-        await loadDetails(false);
+        setSyncMessage('Claim completed. Opening receipt.');
+        setDetails((current) =>
+          current ? { ...current, status: 'disbursed' } : current,
+        );
+        navigation.navigate('ClaimReceipt', { claimId: details.claimId });
       } else {
         setSyncMessage(
           isConnected
@@ -186,7 +189,7 @@ export const AidDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
     } finally {
       setConfirming(false);
     }
-  }, [aidId, details, isConnected, loadDetails, queueClaimConfirmation]);
+  }, [aidId, details, isConnected, loadDetails, navigation, queueClaimConfirmation]);
 
   // ── Auth states ──────────────────────────────────────────────────────────
 
@@ -360,6 +363,15 @@ export const AidDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
         </Text>
       </View>
 
+      {details.status === 'disbursed' ? (
+        <View style={styles.claimCompleteCard} accessibilityRole="status">
+          <Text style={styles.claimCompleteTitle}>Claim completed</Text>
+          <Text style={styles.claimCompleteText}>
+            This package has been disbursed. You can view your claim receipt now.
+          </Text>
+        </View>
+      ) : null}
+
       {/* ── Refresh Button ──────────────────────────────────────────────── */}
       <TouchableOpacity
         accessibilityRole="button"
@@ -393,20 +405,37 @@ export const AidDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
         style={[
           styles.button,
           styles.secondaryButton,
-          confirming || hasPendingConfirmation ? styles.buttonDisabled : null,
+          confirming || hasPendingConfirmation || details.status === 'disbursed'
+            ? styles.buttonDisabled
+            : null,
         ]}
         onPress={handleConfirmClaim}
-        disabled={confirming || hasPendingConfirmation}
+        disabled={confirming || hasPendingConfirmation || details.status === 'disbursed'}
         activeOpacity={0.8}
       >
         {confirming ? (
           <ActivityIndicator size="small" color={colors.brand.primary} />
         ) : (
           <Text style={styles.secondaryButtonText}>
-            {hasPendingConfirmation ? 'Claim Confirmation Queued' : 'Confirm Claim'}
+            {hasPendingConfirmation
+              ? 'Claim Confirmation Queued'
+              : details.status === 'disbursed'
+              ? 'Claim Completed'
+              : 'Confirm Claim'}
           </Text>
         )}
       </TouchableOpacity>
+
+      {details.status === 'disbursed' ? (
+        <TouchableOpacity
+          accessibilityRole="button"
+          style={[styles.button, { backgroundColor: colors.success }]}
+          onPress={() => navigation.navigate('ClaimReceipt', { claimId: details.claimId })}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.buttonText}>View Receipt</Text>
+        </TouchableOpacity>
+      ) : null}
 
       <TouchableOpacity
         accessibilityRole="button"
@@ -762,6 +791,25 @@ const makeStyles = (colors: AppColors) =>
       color: colors.brand.primary,
       fontSize: 16,
       fontWeight: '700',
+    },
+    claimCompleteCard: {
+      backgroundColor: colors.successBg,
+      borderRadius: 12,
+      padding: 16,
+      borderWidth: 1,
+      borderColor: colors.successSoft,
+      marginBottom: 12,
+    },
+    claimCompleteTitle: {
+      fontSize: 16,
+      fontWeight: '700',
+      color: colors.success,
+      marginBottom: 4,
+    },
+    claimCompleteText: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      lineHeight: 20,
     },
     lastUpdated: {
       fontSize: 12,
