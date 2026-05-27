@@ -10,9 +10,8 @@
 
 use aid_escrow::{AidEscrow, AidEscrowClient, Error, PackageStatus};
 use soroban_sdk::{
-    symbol_short,
     testutils::{Address as _, Ledger, LedgerInfo},
-    token::{Client as TokenClient, StellarAssetClient},
+    token::StellarAssetClient,
     Address, Env, Map, Symbol, Vec,
 };
 
@@ -356,7 +355,7 @@ mod combined_boundaries {
         let expires_at = now + 5000; // Zero claim window
 
         // This should fail during package creation
-        let result = t.client.try_create_package(
+        let _result = t.client.try_create_package(
             &t.admin,
             &1u64,
             &recipient,
