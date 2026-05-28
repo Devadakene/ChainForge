@@ -271,6 +271,50 @@ async def health_check():
     return {"status": "healthy", "service": "soter-ai-service", "version": "1.0.0"}
 
 
+@app.get("/health/dependencies")
+async def health_dependencies():
+    """Lightweight dependency probe for staging and CI.
+
+    Checks Redis connectivity, provider configuration readiness, and
+    filesystem/temp access.  Never exposes secrets or PII.
+    """
+    import tempfile
+    import os
+
+    checks: Dict[str, Any] = {}
+
+    # --- Redis ---
+    try:
+        import redis as redis_lib
+
+        r = redis_lib.from_url(settings.redis_url, socket_connect_timeout=2)
+        r.ping()
+        checks["redis"] = {"ok": True}
+    except Exception as exc:
+        checks["redis"] = {"ok": False, "error": type(exc).__name__}
+
+    # --- Provider config ---
+    provider = settings.get_active_provider()
+    checks["provider_config"] = {
+        "ok": provider is not None,
+        "provider": provider or "none",
+    }
+
+    # --- Filesystem / temp ---
+    try:
+        with tempfile.NamedTemporaryFile(delete=True) as tmp:
+            tmp.write(b"probe")
+        checks["filesystem"] = {"ok": True}
+    except Exception as exc:
+        checks["filesystem"] = {"ok": False, "error": type(exc).__name__}
+
+    overall_ok = all(v["ok"] for v in checks.values())
+    return {
+        "status": "ok" if overall_ok else "degraded",
+        "checks": checks,
+    }
+
+
 @app.get("/")
 async def root():
     return {

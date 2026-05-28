@@ -265,3 +265,44 @@ Fix:
 ---
 
 If the public Soroban Testnet RPC is failing repeatedly, use a secondary provider or local standalone node for consistent deployment.
+
+## 11. Handling Testnet Contract Upgrades & State Migration
+
+When iterating on the `aid_escrow` contract on Testnet, changes fall into two categories: non-breaking and breaking.
+
+### Non-Breaking Changes
+*Examples: Adding a new read-only function, fixing a bug that doesn't change storage formats.*
+1. **Redeploy**: Soroban doesn't support true in-place upgrades of Wasm code for the same Contract ID yet. You must deploy a **new Contract ID**.
+2. **Version Bump**: Ensure you bump the semantic `version` in `Cargo.toml`.
+3. **No Migration Needed**: Since it's a new instance, old state is lost. If this is purely a logic update and you don't care about old testnet packages, just use the new Contract ID.
+
+### Breaking Changes (State/Storage Layout)
+*Examples: Changing the `Package` struct fields, changing `DataKey` symbols.*
+1. **Redeploy**: Deploy the new Wasm, which generates a new Contract ID.
+2. **State Migration Strategy**: 
+   - **Reset**: Since it's Testnet, the preferred approach is often to reset the environment (wipe the database, deploy a fresh contract).
+   - **Migrate**: If state must be preserved, you must write an off-chain script to read packages from the old contract and re-create them in the new contract using the admin or a dedicated migration function.
+
+**Note on Queryable Versions:** 
+The contract semantic version is queryable on-chain via the `contract_version()` function. Additionally, `deploy.sh` automatically parses the `Cargo.toml` version and exports it as `CONTRACT_VERSION` in your `.env` artifact.
+
+## 12. Redeployment Checklist (Preventing Orphaned Integrations)
+
+When a new contract is deployed, its **Contract ID changes**. If downstream components are not updated, they will interact with the orphaned contract, causing out-of-sync state or failures.
+
+**Whenever you run `./scripts/deploy.sh` and get a new Contract ID, complete this checklist:**
+
+- [ ] **1. Backend Update:** 
+  - Update `CONTRACT_ID` and `CONTRACT_VERSION` in `app/backend/.env`.
+  - Restart the backend server (`pnpm --filter backend start:dev` or trigger a production redeploy).
+- [ ] **2. Database Sync:** 
+  - If the upgrade involved breaking storage changes, truncate the local/testnet database tables related to packages to avoid mismatched on-chain vs. off-chain state.
+- [ ] **3. Frontend Update:** 
+  - Ensure the frontend receives the new `CONTRACT_ID` (usually fetched via a config endpoint from the backend).
+  - Clear local storage or cached states if they reference old package IDs.
+- [ ] **4. Mobile App Update:** 
+  - Ensure the React Native app restarts or fetches the updated config from the backend.
+- [ ] **5. Indexer / Event Listeners:** 
+  - If you run an off-chain indexer, point it to the new `CONTRACT_ID` and restart it so it begins streaming events from the new deployment ledger.
+- [ ] **6. Announce Change:** 
+  - Notify the team in Discord/Slack that Testnet has migrated to `<NEW_CONTRACT_ID>` (v`<VERSION>`) so other developers pull the latest `.env` config.

@@ -16,6 +16,12 @@ export const stellarNetwork =
   process.env.NEXT_PUBLIC_NETWORK ??
   'unknown';
 
+/**
+ * The network the wallet must be on for on-chain actions to be allowed.
+ * Compared case-insensitively against the Freighter-reported network string.
+ */
+export const EXPECTED_NETWORK = stellarNetwork;
+
 /** Application environment label (e.g. dev, staging, prod). Optional. */
 export const envName: string | null =
   process.env.NEXT_PUBLIC_ENV_NAME?.trim() ?? null;

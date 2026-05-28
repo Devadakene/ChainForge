@@ -76,7 +76,13 @@ if [ ! -f "$WASM_FILE" ]; then
     exit 1
 fi
 
-echo "📦 Contract: $CONTRACT_NAME"
+# Extract contract version
+CONTRACT_VERSION=$(grep '^version =' "contracts/${CONTRACT_NAME}/Cargo.toml" | head -1 | awk -F'"' '{print $2}')
+if [ -z "$CONTRACT_VERSION" ]; then
+    CONTRACT_VERSION="unknown"
+fi
+
+echo "📦 Contract: $CONTRACT_NAME (v$CONTRACT_VERSION)"
 echo "📄 WASM file: $WASM_FILE"
 echo "🔑 Using key: ${SECRET_KEY:0:10}..."
 
@@ -104,6 +110,7 @@ if [ -n "$CONTRACT_ID" ]; then
     echo ""
     echo "✅ Deployment successful!"
     echo "📋 Contract ID: $CONTRACT_ID"
+    echo "🏷️  Contract Version: $CONTRACT_VERSION"
     echo ""
     echo "💡 Save this ID for future interactions:"
     echo "export CONTRACT_ID=\"$CONTRACT_ID\""
@@ -115,7 +122,15 @@ if [ -n "$CONTRACT_ID" ]; then
         else
             echo "CONTRACT_ID=$CONTRACT_ID" >> "$PROJECT_DIR/.env"
         fi
-        echo "📝 Updated .env with contract ID"
+        
+        # Log contract version to .env
+        if grep -q "CONTRACT_VERSION=" "$PROJECT_DIR/.env"; then
+            sed -i.bak "s|CONTRACT_VERSION=.*|CONTRACT_VERSION=$CONTRACT_VERSION|" "$PROJECT_DIR/.env"
+        else
+            echo "CONTRACT_VERSION=$CONTRACT_VERSION" >> "$PROJECT_DIR/.env"
+        fi
+        
+        echo "📝 Updated .env with contract ID and version"
     fi
 else
     echo "⚠️  Could not extract contract ID from output:"

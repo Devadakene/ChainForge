@@ -25,6 +25,10 @@ import {
   CreateClaimResult,
   DisburseParams,
   DisburseResult,
+  ContractMetadata,
+  PauseState,
+  FeeConfig,
+  PackageSummary,
 } from './onchain.adapter';
 
 /** Calls the Soroban RPC endpoint and returns the result value. */
@@ -231,6 +235,55 @@ export class SorobanOnchainAdapter implements OnchainAdapter {
       tokenAddress: params.tokenAddress,
       accountAddress: params.accountAddress,
       balance: String((result as any) ?? '0'),
+      timestamp: new Date(),
+    };
+  }
+
+  async getContractMetadata(): Promise<ContractMetadata> {
+    const result = await rpcCall(this.http, this.rpcUrl, 'getContractData', {
+      contractId: this.contractId,
+      key: 'metadata',
+    });
+    return {
+      version: (result as any)?.version ?? '1.0.0',
+      name: (result as any)?.name ?? 'Soroban Contract',
+      timestamp: new Date(),
+    };
+  }
+
+  async getPauseState(): Promise<PauseState> {
+    const result = await rpcCall(this.http, this.rpcUrl, 'getContractData', {
+      contractId: this.contractId,
+      key: 'paused',
+    });
+    return {
+      isPaused: (result as any) ?? false,
+      timestamp: new Date(),
+    };
+  }
+
+  async getFeeConfig(): Promise<FeeConfig> {
+    const result = await rpcCall(this.http, this.rpcUrl, 'getContractData', {
+      contractId: this.contractId,
+      key: 'fee_config',
+    });
+    return {
+      feePercentage: (result as any)?.fee_percentage ?? '0',
+      maxFee: (result as any)?.max_fee ?? '0',
+      timestamp: new Date(),
+    };
+  }
+
+  async getPackageSummary(packageId: string): Promise<PackageSummary> {
+    const result = await rpcCall(this.http, this.rpcUrl, 'getContractData', {
+      contractId: this.contractId,
+      key: 'summary_' + packageId,
+    });
+    return {
+      packageId,
+      totalAmount: (result as any)?.total_amount ?? '0',
+      claimedAmount: (result as any)?.claimed_amount ?? '0',
+      status: (result as any)?.status ?? 'Active',
       timestamp: new Date(),
     };
   }
