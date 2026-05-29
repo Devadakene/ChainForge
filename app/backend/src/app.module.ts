@@ -38,6 +38,7 @@ import { EvidenceModule } from './evidence/evidence.module';
 import { RetentionPolicyModule } from './retention-policy/retention-policy.module';
 import { InvitesModule } from './orgs/invites.module';
 import { AdminSearchModule } from './search/admin-search.module';
+import { EntityLinkingModule } from './entity-linking/entity-linking.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { AdaptiveRateLimitGuard } from './common/guards/adaptive-rate-limit.guard';
 import { DeprecationInterceptor } from './common/interceptors/deprecation.interceptor';
@@ -107,6 +108,7 @@ import { DeprecationInterceptor } from './common/interceptors/deprecation.interc
     RetentionPolicyModule,
     InvitesModule,
     AdminSearchModule,
+    EntityLinkingModule,
     RedisModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
