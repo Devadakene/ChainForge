@@ -441,6 +441,9 @@ importers:
       eslint-config-expo:
         specifier: ~10.0.0
         version: 10.0.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+      expo-modules-core:
+        specifier: ^56.0.13
+        version: 56.0.13(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.19.15)(ts-node@10.9.2(@swc/core@1.15.30(@swc/helpers@0.5.15))(@types/node@22.19.15)(typescript@5.9.3))
@@ -1168,6 +1171,9 @@ packages:
   '@expo/env@2.1.1':
     resolution: {integrity: sha512-rVvHC4I6xlPcg+mAO09ydUi2Wjv1ZytpLmHOSzvXzBAz9mMrJggqCe4s4dubjJvi/Ino/xQCLhbaLCnTtLpikg==}
     engines: {node: '>=20.12.0'}
+
+  '@expo/expo-modules-macros-plugin@0.0.9':
+    resolution: {integrity: sha512-odai6D7ng/gA7At8ukFcWcauNEeDdyVqzVPbQxDkyU2NTJ4kgphA4I5iigS5C4LXFicSIzEt2nzdlLM8sjsTdA==}
 
   '@expo/fingerprint@0.15.4':
     resolution: {integrity: sha512-eYlxcrGdR2/j2M6pEDXo9zU9KXXF1vhP+V+Tl+lyY+bU8lnzrN6c637mz6Ye3em2ANy8hhUR03Raf8VsT9Ogng==}
@@ -5006,6 +5012,21 @@ packages:
     resolution: {integrity: sha512-LzipcjGqk8gvkrOUf7O2mejNWugPkf3lmd9GkqL9WuNyeN2fRwU0Dn77e3ZUKI3k6sI+DNwjkq4Nu9fNN9WS7Q==}
     peerDependencies:
       react: '*'
+      react-native: '*'
+
+  expo-modules-core@56.0.13:
+    resolution: {integrity: sha512-3Hgpi9Q1O0XqoesQtgFY7qhfDsNA3bJtdCJotEqdE42+N8Zv/LJACbNgIyFN/XrnMDzfF5rozh0vNWaRT0/eXQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+      react-native-worklets: ^0.7.4 || ^0.8.0
+    peerDependenciesMeta:
+      react-native-worklets:
+        optional: true
+
+  expo-modules-jsi@56.0.7:
+    resolution: {integrity: sha512-iBAj4Xeh/8HT201VVxFlmf+VBfmtQV1ZUoJdLQQENm0+j9gnD2QswZLJyNo3CmNNXl46esJeLR5lpGpYZts/zA==}
+    peerDependencies:
       react-native: '*'
 
   expo-notifications@55.0.20:
@@ -9752,6 +9773,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@expo/expo-modules-macros-plugin@0.0.9': {}
+
   '@expo/fingerprint@0.15.4':
     dependencies:
       '@expo/spawn-async': 1.7.2
@@ -14318,6 +14341,18 @@ snapshots:
     dependencies:
       invariant: 2.2.4
       react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
+
+  expo-modules-core@56.0.13(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0):
+    dependencies:
+      '@expo/expo-modules-macros-plugin': 0.0.9
+      expo-modules-jsi: 56.0.7(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))
+      invariant: 2.2.4
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
+
+  expo-modules-jsi@56.0.7(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)):
+    dependencies:
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0)
 
   expo-notifications@55.0.20(expo@54.0.33(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3):

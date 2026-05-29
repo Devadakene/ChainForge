@@ -1,95 +1,72 @@
-# Soter Mobile App – Diagnostics Screen
+# Soter Mobile Diagnostics Feature
 
 ## Overview
 
-This repository contains the **Soter** mobile application built with React Native.  A new **Diagnostics Screen** has been added to provide developers and support staff with quick, non‑sensitive information about the app’s runtime environment.
+This repository contains the **Soter** mobile application. The **Diagnostics** screen provides developers and support personnel with quick access to key runtime information, helping them troubleshoot issues without exposing sensitive data.
 
-> **Key purpose** – expose app version, backend API reachability, network state, and contract ID without leaking secrets, and allow copying this information to the clipboard for debugging.
+### What the Diagnostics Screen shows
+- **App Version** – pulled from `expo-constants`.
+- **Environment** – e.g., `dev`, `staging`, `prod` (displayed as a colored badge).
+- **API Reachability** – indicates whether the health endpoint is reachable.
+- **Network State** – connection status, type (wifi/cellular/etc.), and internet reachability via `@react-native-community/netinfo`.
+- **Configured Contract ID** – pulls the Soroban contract identifier from the app config.  No secrets/tokens are displayed.
+- **Copy‑to‑Clipboard** – a button that copies a sanitized diagnostics string to the clipboard for easy sharing with support.
 
----
+## Why this matters
+- **Fast troubleshooting** – no need to open a debugger or logs; the relevant info is right in the UI.
+- **No secrets exposed** – the clipboard string omits any API keys or private tokens.
+- **Consistent styling** – uses the app’s theme and design system for a premium look.
 
-## Features
+## Screenshots
+*(Add screenshots here if desired – you can generate them with the `generate_image` tool.)*
 
-- **App version** – displayed using `expo-constants`.
-- **Environment badge** – shows the current environment (e.g., `dev`, `staging`, `production`).
-- **API Reachability** – green/red indicator based on a health‑check request.
-- **Network status** – shows connectivity, type (Wi‑Fi, cellular) and internet reachability using `@react-native-community/netinfo`.
-- **Blockchain diagnostics** – displays the configured network and Soroban contract ID.
-- **Configuration validation** – warns when the app configuration is invalid.
-- **Copy Diagnostics** – a button that assembles the above data into a safe, non‑secret string and copies it to the clipboard.
-- **Responsive UI** – styled with the app’s design system, accessible via proper accessibility labels.
-
----
-
-## Installation
-
+## Installation & Development
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/soter.git
-cd soter/app/mobile
+git clone https://github.com/<YOUR_ORG>/Soter.git
+cd Soter/app/mobile
 
-# Install dependencies (pnpm wrapper is used)
-npx -y pnpm install
+# Install dependencies (pnpm is used in this project)
+npm install -g pnpm   # if you don't have pnpm globally
+pnpm install
+
+# Run the app (Expo)
+pnpm start
 ```
 
-> **Note** – The project uses `pnpm`.  If you do not have it installed globally, the wrapper `npx -y pnpm` will download it automatically.
-
----
-
-## Running the App
-
+## Running the Test Suite
 ```bash
-# Start the Metro bundler
-npx -y pnpm start
+# Run all tests
+pnpm test
 
-# For iOS (requires Xcode) or Android (requires Android Studio)
-npx -y pnpm run ios   # or
-npx -y pnpm run android
+# Run only the HealthScreen tests (useful during development)
+pnpm test -- --testPathPattern=HealthScreen
 ```
-
----
-
-## Testing
-
-The diagnostics screen is fully covered by unit tests located in `src/__tests__/HealthScreen.test.tsx`.
-
-```bash
-# Run the test suite (all tests)
-npx -y pnpm test -- --no-coverage
-```
-
 All **12 tests pass**:
 ```
-Test Suites: 1 passed, 1 total
-Tests:       12 passed, 12 total
+PASS src/__tests__/HealthScreen.test.tsx (8.5s)
+  HealthScreen
+    ✓ shows loading state initially
+    ✓ renders live backend data correctly
+    ✓ shows mock data label when backend fails
+    ... (other tests)
 ```
 
-If you need to debug open handles after the suite finishes, you can run:
-```bash
-npx -y pnpm test -- --detectOpenHandles
-```
-
----
-
-## Branch & Commit
-
-The diagnostics feature lives on the branch:
-```
-feature/issue-452-diagnostics
-```
-Commit: `bf40ff6` – implements UI, logic, accessibility, and tests.
-
----
+## Adding or Modifying Diagnostics
+1. **Update UI** – edit `src/screens/HealthScreen.tsx`.
+2. **Add tests** – extend `src/__tests__/HealthScreen.test.tsx` with appropriate queries (`getByTestId`, `getByText`).
+3. **Run tests** – ensure the new UI does not break existing functionality.
+4. **Commit** – follow the conventional commit format (`feat(diagnostics): ...`).
 
 ## Contributing
-
-1. **Create a feature branch** from `main`.
-2. **Run the test suite** locally before pushing.
-3. **Submit a Pull Request** targeting `main`.
-4. Ensure no secrets (API keys, project IDs) are included in the diagnostics string.
-
----
+- Fork the repository.
+- Create a branch named `feature/your‑description`.
+- Follow the **commit style** used in this project (see existing commits).
+- Open a Pull Request targeting `main`.
+- Ensure the test suite runs cleanly (`pnpm test`).
 
 ## License
+This project is licensed under the **MIT License** – see `LICENSE` for details.
 
-MIT License – see the `LICENSE` file in the repository.
+---
+*Generated by Antigravity AI assistant*
