@@ -50,16 +50,17 @@ describe('CampaignsService', () => {
     });
 
     const createArgs = prismaMock.campaign.create.mock.calls[0]?.[0];
-    expect(createArgs).toEqual(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          name: 'Winter Relief 2026',
-          status: CampaignStatus.draft,
-          // Fixed type assignment verification for Prisma.Decimal types
-          budget: expect.any(Object),
-        }),
-      }),
-    );
+    
+    // Clean match validation instead of strict object equivalence structures
+    expect(createArgs).toMatchObject({
+      data: {
+        name: 'Winter Relief 2026',
+        status: CampaignStatus.draft,
+        budget: 1000,
+        metadata: { region: 'Lagos' },
+        ngoId: null,
+      },
+    });
 
     expect(created).toEqual(baseCampaign);
   });
