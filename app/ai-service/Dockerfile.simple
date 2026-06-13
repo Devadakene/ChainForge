@@ -26,7 +26,7 @@ COPY . .
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash chainforge && \
     chown -R chainforge:chainforge /app
-USER soter
+USER chainforge
 
 # Expose port
 EXPOSE 8000
