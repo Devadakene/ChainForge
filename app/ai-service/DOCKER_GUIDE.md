@@ -1,6 +1,6 @@
-# Docker Deployment Guide for Soter AI Service
+# Docker Deployment Guide for ChainForge AI Service
 
-This guide provides comprehensive instructions for deploying the Soter AI Service using Docker with CUDA support.
+This guide provides comprehensive instructions for deploying the ChainForge AI Service using Docker with CUDA support.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ The Dockerfile includes multiple build stages for different use cases:
 
 ### 1. Development Stage
 ```bash
-docker build -t soter-ai-service:dev --target development .
+docker build -t chainforge-ai-service:dev --target development .
 ```
 - Includes development dependencies
 - Enables hot reloading with `--reload`
@@ -24,7 +24,7 @@ docker build -t soter-ai-service:dev --target development .
 
 ### 2. Production Stage (CPU)
 ```bash
-docker build -t soter-ai-service:latest --target production .
+docker build -t chainforge-ai-service:latest --target production .
 ```
 - Optimized for CPU deployment
 - Uses `python:3.10-slim` base image
@@ -34,7 +34,7 @@ docker build -t soter-ai-service:latest --target production .
 
 ### 3. Production Stage (GPU)
 ```bash
-docker build -t soter-ai-service:gpu --target production-gpu .
+docker build -t chainforge-ai-service:gpu --target production-gpu .
 ```
 - CUDA 12.1 runtime with GPU support
 - Optimized for NVIDIA GPUs
@@ -69,7 +69,7 @@ docker-compose down
 
 1. **Build the image:**
 ```bash
-docker build -t soter-ai-service:latest .
+docker build -t chainforge-ai-service:latest .
 ```
 
 2. **Run with Redis:**
@@ -78,7 +78,7 @@ docker run -d --name redis -p 6379:6379 redis:7-alpine
 docker run -d --name ai-service -p 8000:8000 \
   --link redis:redis \
   -e REDIS_URL=redis://redis:6379/0 \
-  soter-ai-service:latest
+  chainforge-ai-service:latest
 ```
 
 ## GPU Deployment
@@ -97,7 +97,7 @@ docker run -d --name ai-service -p 8000:8000 \
 
 2. **Build GPU image:**
 ```bash
-docker build -t soter-ai-service:gpu --target production-gpu .
+docker build -t chainforge-ai-service:gpu --target production-gpu .
 ```
 
 3. **Run with GPU:**
@@ -235,7 +235,7 @@ docker logs ai-service
 
 ## Security Considerations
 
-- Container runs as non-root user `soter`
+- Container runs as non-root user `chainforge`
 - Environment variables should be managed securely
 - Use secrets management for API keys
 - Network isolation in production
@@ -258,7 +258,7 @@ The Docker images are compatible with Kubernetes deployments. Use the appropriat
 
 ### Image Updates
 ```bash
-docker pull soter-ai-service:latest
+docker pull chainforge-ai-service:latest
 docker-compose up -d --force-recreate
 ```
 

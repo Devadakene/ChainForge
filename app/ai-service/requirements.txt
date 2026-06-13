@@ -1,4 +1,4 @@
-# Soter AI Service - Python Dependencies
+# ChainForge AI Service - Python Dependencies
 
 # Core FastAPI framework
 fastapi==0.109.0

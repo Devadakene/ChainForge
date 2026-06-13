@@ -113,7 +113,7 @@ def test_app():
 def main():
     """Run all tests"""
     print("=" * 60)
-    print("Soter AI Service - Setup Verification")
+    print("ChainForge AI Service - Setup Verification")
     print("=" * 60)
     
     results = []

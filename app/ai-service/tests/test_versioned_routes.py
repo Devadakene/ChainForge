@@ -87,7 +87,7 @@ class TestHealthEndpoint:
     def test_health_status(self, client):
         data = client.get("/health").json()
         assert data["status"] == "healthy"
-        assert data["service"] == "soter-ai-service"
+        assert data["service"] == "chainforge-ai-service"
 
     def test_health_version_updated(self, client):
         data = client.get("/health").json()

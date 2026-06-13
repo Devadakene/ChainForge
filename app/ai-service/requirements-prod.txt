@@ -1,4 +1,4 @@
-# Production requirements for Soter AI Service
+# Production requirements for ChainForge AI Service
 # Optimized subset of requirements.txt for production deployment
 
 # Core FastAPI framework

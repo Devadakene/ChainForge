@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Docker Test Script for Soter AI Service
+# Docker Test Script for ChainForge AI Service
 # This script tests the Docker build and deployment
 
 set -e
 
-echo "🐳 Soter AI Service Docker Test Script"
+echo "🐳 ChainForge AI Service Docker Test Script"
 echo "========================================"
 
 # Colors for output
@@ -58,7 +58,7 @@ test_build() {
     print_status "Testing Docker build (production stage)..."
     
     # Build production image
-    if docker build -t soter-ai-service:test --target production .; then
+    if docker build -t chainforge-ai-service:test --target production .; then
         print_status "Production build successful ✓"
     else
         print_error "Production build failed"
@@ -67,7 +67,7 @@ test_build() {
     
     # Build development image
     print_status "Testing Docker build (development stage)..."
-    if docker build -t soter-ai-service:dev-test --target development .; then
+    if docker build -t chainforge-ai-service:dev-test --target development .; then
         print_status "Development build successful ✓"
     else
         print_error "Development build failed"
@@ -94,7 +94,7 @@ test_container() {
         --link redis-test:redis \
         -e REDIS_URL=redis://redis:6379/0 \
         -e APP_ENV=test \
-        soter-ai-service:test
+        chainforge-ai-service:test
     
     # Wait for service to be ready
     print_status "Waiting for AI service to be ready..."
@@ -169,7 +169,7 @@ test_gpu() {
         
         # Test GPU build
         print_status "Testing GPU build..."
-        if docker build -t soter-ai-service:gpu-test --target production-gpu .; then
+        if docker build -t chainforge-ai-service:gpu-test --target production-gpu .; then
             print_status "GPU build successful ✓"
         else
             print_warning "GPU build failed, falling back to CPU"
@@ -200,7 +200,7 @@ cleanup() {
     docker-compose down 2>/dev/null || true
     
     # Remove test images
-    docker rmi soter-ai-service:test soter-ai-service:dev-test soter-ai-service:gpu-test 2>/dev/null || true
+    docker rmi chainforge-ai-service:test chainforge-ai-service:dev-test chainforge-ai-service:gpu-test 2>/dev/null || true
     
     print_status "Cleanup completed ✓"
 }

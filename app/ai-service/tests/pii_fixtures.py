@@ -3,7 +3,7 @@
 PII_FIXTURES = [
     {
         "name": "email_standard",
-        "text": "Please contact us at support@pulsefy.org or john.doe123@gmail.com",
+        "text": "Please contact us at support@example.org or john.doe123@gmail.com",
         "expected_tokens": ["[EMAIL_ADDRESS]"],
         "min_count": 2
     },

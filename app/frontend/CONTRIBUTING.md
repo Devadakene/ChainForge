@@ -1,6 +1,6 @@
-# Contributing to Soter Frontend
+# Contributing to ChainForge Frontend
 
-Thank you for your interest in contributing to the Soter frontend! This document covers the development workflow, code standards, and conventions for submitting changes.
+Thank you for your interest in contributing to the ChainForge frontend! This document covers the development workflow, code standards, and conventions for submitting changes.
 
 ---
 
@@ -34,10 +34,10 @@ Thank you for your interest in contributing to the Soter frontend! This document
 ### Initial Setup
 
 1. **Fork and clone** the repository:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/soter.git
-   cd soter
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/chainforge.git
+cd chainforge
+```
 
 2. **Install dependencies** from the monorepo root:
    ```bash
@@ -605,8 +605,8 @@ pnpm install
 
 ## Getting Help
 
-- **Questions**: Open a [GitHub Discussion](https://github.com/your-org/soter/discussions)
-- **Bugs**: Open a [GitHub Issue](https://github.com/your-org/soter/issues) with steps to reproduce
+- **Questions**: Open a [GitHub Discussion](https://github.com/your-org/chainforge/discussions)
+- **Bugs**: Open a [GitHub Issue](https://github.com/your-org/chainforge/issues) with steps to reproduce
 - **Docs**: Check the [README](./README.md) and [project docs](../../README.md) first
 
 ## Code of Conduct

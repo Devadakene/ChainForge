@@ -2,7 +2,7 @@
 
 ## Overview
 
-This policy defines the security requirements, operational procedures, and best practices for managing admin keys in Soter's Stellar testnet deployments. Admin keys control critical contract operations including package creation, disbursement, revocation, and contract configuration.
+This policy defines the security requirements, operational procedures, and best practices for managing admin keys in ChainForge's Stellar testnet deployments. Admin keys control critical contract operations including package creation, disbursement, revocation, and contract configuration.
 
 ## Scope
 
@@ -234,7 +234,7 @@ curl "https://friendbot.stellar.org?addr=<PUBLIC_KEY>"
 
 For questions about this policy or to report security incidents:
 - Team Discord: https://discord.gg/gBmApTNVV
-- GitHub Issues: https://github.com/jaynomyaro/Soter/issues
+- GitHub Issues: https://github.com/ChainForge/issues
 
 ---
 

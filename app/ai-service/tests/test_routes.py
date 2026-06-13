@@ -18,7 +18,7 @@ class TestHealthEndpoint:
         response = client.get("/health")
         data = response.json()
         assert data["status"] == "healthy"
-        assert data["service"] == "soter-ai-service"
+        assert data["service"] == "chainforge-ai-service"
 
 
 class TestOCRRoutes:

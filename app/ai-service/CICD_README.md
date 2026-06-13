@@ -1,6 +1,6 @@
 # AI Service CI/CD Workflow
 
-This document describes the Continuous Integration and Continuous Deployment (CI/CD) workflow for the Soter AI Service.
+This document describes the Continuous Integration and Continuous Deployment (CI/CD) workflow for the ChainForge AI Service.
 
 ## Overview
 
