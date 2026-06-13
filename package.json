@@ -1,5 +1,5 @@
 {
-  "name": "soter",
+  "name": "chainforge",
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
@@ -31,18 +31,17 @@
     "redis": "^5.12.1"
   },
   "version": "1.0.0",
-  "description": "<img width=\"1080\" height=\"1080\" alt=\"Gemini_Generated_Image_efez0kefez0kefez (1)\" src=\"https://github.com/user-attachments/assets/72250381-5090-45e4-9941-5096c190a000\" />",
-  "main": ".eslintrc.js",
+  "description": "ChainForge - Humanitarian aid distribution platform on Stellar",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Truphile/Soter.git"
+    "url": "git+https://github.com/ChainForge/chainforge.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["humanitarian-aid", "stellar", "soroban", "blockchain", "aid-distribution", "smart-contracts"],
+  "author": "ChainForge Team",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Truphile/Soter/issues"
+    "url": "https://github.com/ChainForge/chainforge/issues"
   },
-  "homepage": "https://github.com/Truphile/Soter#readme"
+  "homepage": "https://github.com/ChainForge/chainforge#readme"
 }
