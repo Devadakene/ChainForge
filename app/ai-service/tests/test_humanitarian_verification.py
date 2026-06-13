@@ -14,7 +14,7 @@ class TestHumanitarianVerificationService:
     def test_verify_claim_uses_fallback_prompt_after_primary_failure(self, mock_labels, monkeypatch):
         mock_observe = MagicMock()
         mock_labels.return_value.observe = mock_observe
-        
+       
         calls = []
 
         def fake_attempt_order(provider_preference):
@@ -44,7 +44,7 @@ class TestHumanitarianVerificationService:
         assert result["provider"] == "openai"
         assert result["verification"]["verdict"] == "inconclusive"
         assert len(calls) == 2
-        
+       
         mock_labels.assert_called_with(step_name='verify')
         mock_observe.assert_called_once()
 
