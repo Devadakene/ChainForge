@@ -34,7 +34,7 @@ class PIIScrubberService:
     }
 
     ALLOWLIST = {
-        "ChainForge", "Stellar", "Humanitarian", "Coordinator", 
+        "ChainForge", "Stellar", "Humanitarian", "Coordinator",
         "Manager", "Project", "Water", "Clear", "Crystal"
     }
 
@@ -229,7 +229,7 @@ class PIIScrubberService:
 
         # Filter out spans that are in the allowlist
         filtered_by_allowlist = [
-            span for span in spans 
+            span for span in spans
             if not any(word in self.ALLOWLIST for word in span.text.split())
         ]
 
