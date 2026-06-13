@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 class CircuitBreaker:
     """
     A thread-safe implementation of the Circuit Breaker pattern.
-    
+   
     States:
     - CLOSED: Normal operation. Requests flow through.
     - OPEN: Service is failing. Requests fail-fast (return False/raise error).
@@ -19,7 +19,7 @@ class CircuitBreaker:
         self.name = name
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
-        
+       
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
         self.failure_count = 0
         self.last_state_change = time.time()
