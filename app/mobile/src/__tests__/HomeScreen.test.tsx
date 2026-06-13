@@ -36,7 +36,7 @@ describe('HomeScreen', () => {
 
   it('renders correctly', () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation} />);
-    expect(getByText('Soter')).toBeTruthy();
+    expect(getByText('ChainForge')).toBeTruthy();
     expect(getByText('Powered by Stellar')).toBeTruthy();
     expect(getByText('Transparent aid, directly delivered.')).toBeTruthy();
     expect(getByText('Connect Wallet')).toBeTruthy();

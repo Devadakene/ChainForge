@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AidPackage } from './api';
 
-const CACHE_KEY = '@soter/aid_overview';
-const CACHE_TIMESTAMP_KEY = '@soter/aid_overview_timestamp';
+const CACHE_KEY = '@chainforge/aid_overview';
+const CACHE_TIMESTAMP_KEY = '@chainforge/aid_overview_timestamp';
 
 /** Persist aid list to AsyncStorage */
 export const cacheAidList = async (data: AidPackage[]): Promise<void> => {

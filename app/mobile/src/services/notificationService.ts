@@ -131,11 +131,11 @@ export async function configureAndroidChannel(): Promise<void> {
   if (Platform.OS !== 'android') return;
 
   await Notifications.setNotificationChannelAsync('default', {
-    name: 'Soter Notifications',
+    name: 'ChainForge Notifications',
     importance: Notifications.AndroidImportance.MAX,
     vibrationPattern: [0, 250, 250, 250],
     lightColor: '#1E90FF',
-    description: 'Important claim and verification updates from Soter',
+    description: 'Important claim and verification updates from ChainForge',
   });
 
   // Separate channel for verification status updates

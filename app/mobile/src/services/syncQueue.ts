@@ -5,7 +5,7 @@ import { config } from '../config';
 
 const API_URL = config.apiUrl;
 
-const SYNC_QUEUE_STORAGE_KEY = '@soter/sync-queue';
+const SYNC_QUEUE_STORAGE_KEY = '@chainforge/sync-queue';
 const DEFAULT_MAX_RETRIES = 5;
 const BASE_RETRY_DELAY_MS = 30_000;
 const MAX_RETRY_DELAY_MS = 15 * 60 * 1000;

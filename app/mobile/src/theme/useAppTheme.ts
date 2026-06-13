@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Appearance, ColorSchemeName } from 'react-native';
-import { Colors, SoterLightTheme, SoterDarkTheme } from './theme';
+import { Colors, ChainForgeLightTheme, ChainForgeDarkTheme } from './theme';
 
 /**
  * Cross-platform color scheme hook using Appearance API.
@@ -35,7 +35,7 @@ export const useAppTheme = () => {
       ? { ...Colors.dark, brand: Colors.brand }
       : { ...Colors.light, brand: Colors.brand };
 
-  const navTheme = scheme === 'dark' ? SoterDarkTheme : SoterLightTheme;
+  const navTheme = scheme === 'dark' ? ChainForgeDarkTheme : ChainForgeLightTheme;
 
   return { colors, navTheme, scheme };
 };

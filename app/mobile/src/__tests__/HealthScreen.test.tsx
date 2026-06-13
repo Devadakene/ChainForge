@@ -28,11 +28,11 @@ jest.mock('@react-native-community/netinfo', () => ({
 // Mock useTheme
 jest.mock('../theme/ThemeContext', () => ({
   useTheme: () => {
-    const { Colors, SoterLightTheme } = require('../theme/theme');
+    const { Colors, ChainForgeLightTheme } = require('../theme/theme');
 
     return {
       colors: { ...Colors.light, brand: Colors.brand },
-      navTheme: SoterLightTheme,
+      navTheme: ChainForgeLightTheme,
       scheme: 'light',
     };
   },
@@ -252,7 +252,7 @@ describe('HealthScreen', () => {
 
     expect(clipboardSpy).toHaveBeenCalled();
     const copiedText = clipboardSpy.mock.calls[0][0];
-    expect(copiedText).toContain('Soter App Diagnostics');
+    expect(copiedText).toContain('ChainForge App Diagnostics');
     expect(copiedText).toContain('App Version: 1.2.3');
     expect(copiedText).toContain('API Reachability: Reachable');
     expect(copiedText).toContain('Network Connected: Yes');

@@ -1,7 +1,7 @@
 import { DefaultTheme, DarkTheme, Theme } from '@react-navigation/native';
 
 // ---------------------------------------------------------------------------
-// Soter Brand Palette
+// ChainForge Brand Palette
 // ---------------------------------------------------------------------------
 // WCAG 2.1 AA contrast ratios (≥ 4.5:1 normal text, ≥ 3:1 large/UI):
 //   brand.primary #2563EB on light.background #F8FAFC → 5.9:1 ✅
@@ -12,7 +12,7 @@ import { DefaultTheme, DarkTheme, Theme } from '@react-navigation/native';
 
 export const Colors = {
   brand: {
-    primary: '#2563EB', // Soter blue — AA on both backgrounds
+    primary: '#2563EB', // ChainForge blue — AA on both backgrounds
     primaryDark: '#1D4ED8', // pressed / hover state
     accent: '#0EA5E9', // sky accent
   },
@@ -60,7 +60,7 @@ export const Colors = {
 // drawers all respond to dark mode automatically.
 // ---------------------------------------------------------------------------
 
-export const SoterLightTheme: Theme = {
+export const ChainForgeLightTheme: Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -73,7 +73,7 @@ export const SoterLightTheme: Theme = {
   },
 };
 
-export const SoterDarkTheme: Theme = {
+export const ChainForgeDarkTheme: Theme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,

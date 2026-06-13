@@ -12,7 +12,7 @@ interface UpdateContextType extends UpdateState {
 
 const UpdateContext = createContext<UpdateContextType | undefined>(undefined);
 
-const SEEN_RELEASE_NOTES_KEY = '@Soter:SeenReleaseNotes';
+const SEEN_RELEASE_NOTES_KEY = '@ChainForge:SeenReleaseNotes';
 
 export const UpdateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<UpdateState>({

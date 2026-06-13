@@ -1,7 +1,7 @@
 import { VersionInfo } from '../types/update';
 
 // In a real app, this would be a URL to your backend or a config file (e.g., hosted on GitHub or S3)
-const VERSION_CONFIG_URL = 'https://api.pulsefy.org/soter/mobile/version';
+const VERSION_CONFIG_URL = 'https://api.chainforge.app/mobile/version';
 
 export const fetchVersionInfo = async (): Promise<VersionInfo> => {
   try {
@@ -26,8 +26,8 @@ export const fetchVersionInfo = async (): Promise<VersionInfo> => {
         'Reduced app bundle size by 15%',
       ],
       storeUrl: {
-        ios: 'https://apps.apple.com/app/soter',
-        android: 'https://play.google.com/store/apps/details?id=org.pulsefy.soter.mobile',
+        ios: 'https://apps.apple.com/app/chainforge',
+        android: 'https://play.google.com/store/apps/details?id=com.chainforge.mobile',
       },
     };
   } catch (error) {

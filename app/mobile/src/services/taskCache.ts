@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TaskItem } from './taskApi';
 
-const CACHE_KEY = '@soter/task_list';
-const CACHE_TIMESTAMP_KEY = '@soter/task_list_timestamp';
+const CACHE_KEY = '@chainforge/task_list';
+const CACHE_TIMESTAMP_KEY = '@chainforge/task_list_timestamp';
 
 /** Persist task list to AsyncStorage */
 export const cacheTaskList = async (data: TaskItem[]): Promise<void> => {

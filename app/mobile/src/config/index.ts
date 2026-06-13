@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 /**
- * Environment variable schema for the Soter mobile app.
+ * Environment variable schema for the ChainForge mobile app.
  * All variables must be prefixed with EXPO_PUBLIC_ to be accessible in the JS bundle.
  */
 export interface AppConfig {

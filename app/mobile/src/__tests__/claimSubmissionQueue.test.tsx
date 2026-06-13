@@ -17,7 +17,7 @@ jest.mock('@expo/vector-icons', () => ({
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
-const QUEUE_KEY = '@soter/sync-queue';
+const QUEUE_KEY = '@chainforge/sync-queue';
 
 const seedStorage = async (items: object[]) => {
   await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(items));

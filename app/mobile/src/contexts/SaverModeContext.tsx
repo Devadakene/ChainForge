@@ -13,8 +13,8 @@ import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 // Constants
 // ---------------------------------------------------------------------------
 
-const SAVER_MODE_KEY = '@soter/saver-mode';
-const SAVER_AUTO_KEY = '@soter/saver-auto';
+const SAVER_MODE_KEY = '@chainforge/saver-mode';
+const SAVER_AUTO_KEY = '@chainforge/saver-auto';
 
 /**
  * Connection quality thresholds for auto-enabling saver mode.

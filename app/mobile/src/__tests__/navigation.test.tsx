@@ -119,7 +119,7 @@ describe('Navigation: Home -> AidOverview -> AidDetails', () => {
   it('renders HomeScreen with title', async () => {
     const { getByText } = render(<TestNavigator initialRoute="Home" />);
     await waitFor(() => {
-      expect(getByText('Soter')).toBeTruthy();
+      expect(getByText('ChainForge')).toBeTruthy();
     });
   });
 

@@ -6,11 +6,11 @@ import { config } from '../config';
 
 jest.mock('../theme/ThemeContext', () => ({
   useTheme: () => {
-    const { Colors, SoterLightTheme } = require('../theme/theme');
+    const { Colors, ChainForgeLightTheme } = require('../theme/theme');
 
     return {
       colors: { ...Colors.light, brand: Colors.brand },
-      navTheme: SoterLightTheme,
+      navTheme: ChainForgeLightTheme,
       scheme: 'light',
     };
   },

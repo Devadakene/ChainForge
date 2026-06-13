@@ -3,9 +3,9 @@ import SignClient from '@walletconnect/sign-client';
 
 import { config, getStellarChainId } from '../config';
 
-const APP_SCHEME = 'soter';
-const DEFAULT_APP_URL = 'https://github.com/Pulsefy/Soter';
-const DEFAULT_ICON = 'https://raw.githubusercontent.com/Pulsefy/Soter/main/app/mobile/assets/icon.png';
+const APP_SCHEME = 'chainforge';
+const DEFAULT_APP_URL = 'https://github.com/ChainForge/chainforge';
+const DEFAULT_ICON = 'https://raw.githubusercontent.com/ChainForge/chainforge/main/app/mobile/assets/icon.png';
 const STELLAR_NAMESPACE = 'stellar';
 
 const STELLAR_METHODS = ['stellar_signXDR', 'stellar_signAndSubmitXDR'];
@@ -57,8 +57,8 @@ export const getWalletConnectChainId = () => {
 };
 
 const getAppMetadata = () => ({
-  name: 'Soter Mobile',
-  description: 'Soter mobile wallet connection for transparent aid delivery on Stellar.',
+  name: 'ChainForge Mobile',
+  description: 'ChainForge mobile wallet connection for transparent aid delivery on Stellar.',
   url: DEFAULT_APP_URL,
   icons: [DEFAULT_ICON],
   redirect: {

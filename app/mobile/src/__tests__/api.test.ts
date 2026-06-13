@@ -10,7 +10,7 @@ beforeEach(() => { mockFetch.mockReset(); });
 
 describe('fetchHealthStatus', () => {
   it('returns parsed health data on 200', async () => {
-    const payload = { status: 'ok', service: 'soter-backend', version: '1.0.0', environment: 'test', timestamp: '2026-01-01T00:00:00Z' };
+    const payload = { status: 'ok', service: 'chainforge-backend', version: '1.0.0', environment: 'test', timestamp: '2026-01-01T00:00:00Z' };
     mockFetch.mockResolvedValueOnce({ ok: true, json: async () => payload });
     const result = await fetchHealthStatus();
     expect(result).toEqual(payload);
