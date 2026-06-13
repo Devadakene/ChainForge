@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="assets/soter-logo.png" width="160" alt="Soter logo" />
+  <img src="assets/chainforge-logo.png" width="160" alt="ChainForge logo" />
 </p>
 
-# Soter
+# ChainForge
 
-Soter is a humanitarian aid distribution platform built on the Stellar ecosystem (Soroban). It combines on-chain escrow and auditable events with off-chain verification and field-ready client apps.
+ChainForge is a humanitarian aid distribution platform built on the Stellar ecosystem (Soroban). It combines on-chain escrow and auditable events with off-chain verification and field-ready client apps.
 
 ## Features
 
@@ -20,13 +20,13 @@ Soter is a humanitarian aid distribution platform built on the Stellar ecosystem
 - Deterministic test modes (where applicable) for stable demos and CI
 - Health probes and observability hooks for on-chain calls and background jobs
 
-## What’s in this repo
+## What's in this repo
 
-- Backend (NestJS): APIs, orchestration, persistence, on-chain adapter, observability ([backend README](app/backend/README.md))
-- Smart Contracts (Soroban/Rust): AidEscrow escrow + claim flows ([onchain README](app/onchain/README.md))
-- Frontend (Next.js): admin/donor UI, dashboards, wallet flows ([frontend README](app/frontend/README.md))
-- Mobile (Expo): field operations + pilot flows ([mobile README](app/mobile/README.md))
-- AI Service (FastAPI): OCR/anonymization/fraud checks for verification flows ([ai-service README](app/ai-service/README.md))
+- **Backend (NestJS)**: APIs, orchestration, persistence, on-chain adapter, observability ([backend README](app/backend/README.md))
+- **Smart Contracts (Soroban/Rust)**: AidEscrow escrow + claim flows ([onchain README](app/onchain/README.md))
+- **Frontend (Next.js)**: admin/donor UI, dashboards, wallet flows ([frontend README](app/frontend/README.md))
+- **Mobile (Expo)**: field operations + pilot flows ([mobile README](app/mobile/README.md))
+- **AI Service (FastAPI)**: OCR/anonymization/fraud checks for verification flows ([ai-service README](app/ai-service/README.md))
 
 ## Tech stack
 
@@ -40,7 +40,7 @@ Soter is a humanitarian aid distribution platform built on the Stellar ecosystem
 ## Repository structure
 
 ```text
-Soter/
+ChainForge/
 ├── .github/workflows/        # CI workflows
 ├── app/
 │   ├── onchain/              # Soroban contracts (Rust)
@@ -48,7 +48,9 @@ Soter/
 │   ├── frontend/             # Next.js web app
 │   ├── mobile/               # Expo mobile app
 │   └── ai-service/           # FastAPI service (OCR/anonymize/fraud, etc.)
-└── assets/                   # Repository assets (logo)
+├── assets/                   # Repository assets (logo)
+├── tools/                    # Developer tooling (testnet harness, merkle allowlist)
+└── docs/                     # Documentation
 ```
 
 ## Setup instructions
@@ -84,7 +86,7 @@ pnpm dev
 ```bash
 cd app/ai-service
 python -m venv .venv
-.venv\\Scripts\\activate
+.venv/Scripts/activate
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```

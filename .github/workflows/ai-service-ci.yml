@@ -148,11 +148,11 @@ jobs:
         file: ./app/ai-service/Dockerfile.simple
         push: false
         load: true
-        tags: soter-ai-service:test
+        tags: chainforge-ai-service:test
         
     - name: Test Docker container
       run: |
-        docker run -d --name test-container -p 8000:8000 soter-ai-service:test
+        docker run -d --name test-container -p 8000:8000 chainforge-ai-service:test
         # Wait for container to be ready with retry logic
         for i in $(seq 1 30); do
           if curl -sf http://localhost:8000/health > /dev/null 2>&1; then
@@ -226,7 +226,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ghcr.io/${{ github.repository_owner }}/soter-ai-service
+        images: ghcr.io/${{ github.repository_owner }}/chainforge-ai-service
         tags: |
           type=ref,event=branch
           type=ref,event=tag
