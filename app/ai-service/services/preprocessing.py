@@ -57,7 +57,7 @@ class ImagePreprocessor:
         denoise: bool = True,
     ) -> Image.Image:
         start_time = time.time()
-        
+       
         try:
             if image.size[0] == 0 or image.size[1] == 0:
                 return image.convert("L")
