@@ -1,43 +1,9 @@
+# Dependabot version updates are intentionally disabled on this repository.
+#
+# Keeping this file in place on the default branch ensures that Dependabot
+# does not open automated dependency-update pull requests. To re-enable
+# version updates in the future, replace this file with a configuration
+# generated from
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
-updates:
-  # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-
-  # Backend (NestJS)
-  - package-ecosystem: "npm"
-    directory: "/app/backend"
-    schedule:
-      interval: "weekly"
-
-  # Frontend (Next.js)
-  - package-ecosystem: "npm"
-    directory: "/app/frontend"
-    schedule:
-      interval: "weekly"
-
-  # Mobile (Expo)
-  - package-ecosystem: "npm"
-    directory: "/app/mobile"
-    schedule:
-      interval: "weekly"
-
-  # Tools
-  - package-ecosystem: "npm"
-    directory: "/tools/merkle-allowlist"
-    schedule:
-      interval: "weekly"
-
-  # AI Service (Python)
-  - package-ecosystem: "pip"
-    directory: "/app/ai-service"
-    schedule:
-      interval: "weekly"
-
-  # Smart Contracts (Rust)
-  - package-ecosystem: "cargo"
-    directory: "/app/onchain"
-    schedule:
-      interval: "weekly"
+updates: []
