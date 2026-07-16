@@ -1,5 +1,5 @@
 import { config as dotenvConfig } from 'dotenv';
-import { existsSync } from 'node:fs';
+import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 /**
@@ -14,7 +14,7 @@ export function loadEnv(): string {
     join(__dirname, '..', '..', '..', '.env'),
   ];
 
-  const envPath = candidates.find(p => existsSync(p));
+  const envPath = candidates.find(p => fs.existsSync(p));
   if (envPath) {
     dotenvConfig({ path: envPath });
     return envPath;
