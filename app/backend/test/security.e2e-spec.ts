@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import request from 'supertest';
+import crypto from 'node:crypto';
+import { PrismaService } from '../src/prisma/prisma.service';
 import { AppModule } from '../src/app.module';
 import {
   buildCorsOptions,
@@ -235,7 +237,6 @@ describe('Security (e2e)', () => {
     describe('Organization-based Rate Limiting', () => {
       let orgRateLimitApp: INestApplication;
       let prisma: any;
-      const crypto = require('node:crypto');
 
       const hashApiKey = (key: string) => {
         return crypto.createHash('sha256').update(key).digest('hex');
@@ -268,7 +269,7 @@ describe('Security (e2e)', () => {
         process.env.API_RATE_LIMIT = '250';
         process.env.THROTTLE_TTL = '60000';
         orgRateLimitApp = await createTestApp({ enableDocs: false });
-        prisma = orgRateLimitApp.get(require('../src/prisma/prisma.service').PrismaService);
+        prisma = orgRateLimitApp.get(PrismaService);
 
         await cleanupDb();
 
@@ -325,7 +326,7 @@ describe('Security (e2e)', () => {
         process.env.API_RATE_LIMIT = '50';
         process.env.THROTTLE_TTL = '60000';
         orgRateLimitApp = await createTestApp({ enableDocs: false });
-        prisma = orgRateLimitApp.get(require('../src/prisma/prisma.service').PrismaService);
+        prisma = orgRateLimitApp.get(PrismaService);
 
         await cleanupDb();
 
