@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
+import { PrismaModule } from '../src/prisma/prisma.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
 describe('AuditLog Partitioning (e2e)', () => {
@@ -10,14 +10,14 @@ describe('AuditLog Partitioning (e2e)', () => {
   beforeAll(async () => {
     try {
       const moduleFixture: TestingModule = await Test.createTestingModule({
-        imports: [AppModule],
+        imports: [PrismaModule],
       }).compile();
 
       app = moduleFixture.createNestApplication();
       await app.init();
       prisma = app.get(PrismaService);
     } catch (error) {
-      console.log('Skipping e2e test: AppModule initialization failed (likely missing database connection/dependencies)', error);
+      console.log('Skipping e2e test: PrismaModule initialization failed (likely missing database connection/dependencies)', error);
     }
   });
 
