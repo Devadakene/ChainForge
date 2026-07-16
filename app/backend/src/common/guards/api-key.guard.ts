@@ -64,6 +64,9 @@ export class ApiKeyGuard implements CanActivate {
         apiKeyId: record.id,
         authType: 'apiKey',
       };
+      if (record.orgId) {
+        (request as any).org = record.orgId;
+      }
       return true;
     }
 

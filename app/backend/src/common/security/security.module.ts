@@ -3,6 +3,10 @@ import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-option
 import { ConfigService } from '@nestjs/config';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import helmet, { HelmetOptions } from 'helmet';
+import { PrismaClient } from '@prisma/client';
+import { createHash } from 'node:crypto';
+
+const prisma = new PrismaClient();
 
 const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:3000',
@@ -208,14 +212,14 @@ export const createRateLimiter = (config: ConfigService): RequestHandler => {
     }
   };
 
-  return (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     if (isRateLimitExempt(req)) {
       next();
       return;
     }
 
     // Apply rate limiting for verification endpoints always,
-    // otherwise only apply to unauthenticated requests (no Authorization header)
+    // otherwise only apply to unauthenticated requests (no Authorization header or x-api-key)
     const path = req.path ?? req.originalUrl ?? req.url ?? '';
     const normalizedPath = path.split('?')[0];
     const isVerificationPath = /^\/(api\/)?(v\d+\/)?verification(\/|$)/i.test(
@@ -224,7 +228,9 @@ export const createRateLimiter = (config: ConfigService): RequestHandler => {
 
     const hasAuthHeader = !!(
       (req.headers &&
-        (req.headers.authorization || req.headers.Authorization)) ||
+        (req.headers.authorization ||
+          req.headers.Authorization ||
+          req.headers['x-api-key'])) ||
       req.user
     );
 
@@ -234,15 +240,45 @@ export const createRateLimiter = (config: ConfigService): RequestHandler => {
       return;
     }
 
+    let orgId = (req as any).org;
+    if (!orgId) {
+      const apiKeyHeader = req.headers ? req.headers['x-api-key'] : undefined;
+      const apiKey =
+        typeof apiKeyHeader === 'string'
+          ? apiKeyHeader
+          : Array.isArray(apiKeyHeader)
+            ? apiKeyHeader[0]
+            : undefined;
+      if (apiKey) {
+        try {
+          const apiKeyHash = createHash('sha256').update(apiKey).digest('hex');
+          const record = await prisma.apiKey.findFirst({
+            where: {
+              revokedAt: null,
+              OR: [{ keyHash: apiKeyHash }, { key: apiKey }],
+            },
+          });
+          if (record && record.orgId) {
+            orgId = record.orgId;
+            (req as any).org = orgId;
+          }
+        } catch (err) {
+          // ignore database errors during rate limiting lookup
+        }
+      }
+    }
+
     const now = Date.now();
     cleanupExpiredEntries(now);
 
     const forwardedIp =
       Array.isArray(req.ips) && req.ips.length > 0 ? req.ips[0] : undefined;
-    const key: string =
+    const ipKey =
       (typeof forwardedIp === 'string' ? forwardedIp : undefined) ??
       (typeof req.ip === 'string' ? req.ip : undefined) ??
       'unknown';
+
+    const key = orgId ? `org:${orgId}` : ipKey;
     let entry = store.get(key);
     if (!entry || entry.resetTimeMs <= now) {
       entry = { count: 0, resetTimeMs: now + windowMs };

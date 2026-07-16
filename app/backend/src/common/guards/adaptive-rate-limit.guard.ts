@@ -80,6 +80,9 @@ export class AdaptiveRateLimitGuard implements CanActivate {
   }
 
   private getIdentifier(request: Request): string {
+    const orgId = (request as any).org;
+    if (orgId) return `org:${orgId}`;
+
     const user = (request as any).user;
     if (user?.id) return user.id as string;
     if (user?.apiKeyId) return user.apiKeyId as string;

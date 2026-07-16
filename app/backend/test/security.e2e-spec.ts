@@ -231,6 +231,135 @@ describe('Security (e2e)', () => {
         expect(response.status).toBe(200);
       }
     });
+
+    describe('Organization-based Rate Limiting', () => {
+      let orgRateLimitApp: INestApplication;
+      let prisma: any;
+      const crypto = require('node:crypto');
+
+      const hashApiKey = (key: string) => {
+        return crypto.createHash('sha256').update(key).digest('hex');
+      };
+
+      const cleanupDb = async () => {
+        try {
+          await prisma.apiKey.deleteMany({
+            where: {
+              orgId: { in: ['org-a', 'org-b'] },
+            },
+          });
+          await prisma.organization.deleteMany({
+            where: {
+              id: { in: ['org-a', 'org-b'] },
+            },
+          });
+        } catch {
+          // ignore cleanup errors
+        }
+      };
+
+      afterEach(async () => {
+        if (orgRateLimitApp) {
+          await orgRateLimitApp.close();
+        }
+      });
+
+      it('should simulate 200 requests under org A and 200 under org B in parallel without tripping 429', async () => {
+        process.env.API_RATE_LIMIT = '250';
+        process.env.THROTTLE_TTL = '60000';
+        orgRateLimitApp = await createTestApp({ enableDocs: false });
+        prisma = orgRateLimitApp.get(require('../src/prisma/prisma.service').PrismaService);
+
+        await cleanupDb();
+
+        await prisma.organization.create({ data: { id: 'org-a', name: 'Org A' } });
+        await prisma.organization.create({ data: { id: 'org-b', name: 'Org B' } });
+
+        await prisma.apiKey.create({
+          data: {
+            id: 'key-a',
+            keyHash: hashApiKey('key-a-secret'),
+            role: 'operator',
+            orgId: 'org-a',
+          },
+        });
+        await prisma.apiKey.create({
+          data: {
+            id: 'key-b',
+            keyHash: hashApiKey('key-b-secret'),
+            role: 'operator',
+            orgId: 'org-b',
+          },
+        });
+
+        const server = orgRateLimitApp.getHttpServer();
+
+        // Run 200 requests for org A and 200 for org B in parallel
+        const promisesA = Array.from({ length: 200 }).map(() =>
+          request(server)
+            .post('/api/v1/verification')
+            .set('x-api-key', 'key-a-secret')
+            .send({}),
+        );
+        const promisesB = Array.from({ length: 200 }).map(() =>
+          request(server)
+            .post('/api/v1/verification')
+            .set('x-api-key', 'key-b-secret')
+            .send({}),
+        );
+
+        const responsesA = await Promise.all(promisesA);
+        const responsesB = await Promise.all(promisesB);
+
+        for (const res of responsesA) {
+          expect(res.status).not.toBe(429);
+        }
+        for (const res of responsesB) {
+          expect(res.status).not.toBe(429);
+        }
+
+        await cleanupDb();
+      });
+
+      it('should trip 429 on the 51st request for a single org when limit is 50', async () => {
+        process.env.API_RATE_LIMIT = '50';
+        process.env.THROTTLE_TTL = '60000';
+        orgRateLimitApp = await createTestApp({ enableDocs: false });
+        prisma = orgRateLimitApp.get(require('../src/prisma/prisma.service').PrismaService);
+
+        await cleanupDb();
+
+        await prisma.organization.create({ data: { id: 'org-a', name: 'Org A' } });
+        await prisma.apiKey.create({
+          data: {
+            id: 'key-a',
+            keyHash: hashApiKey('key-a-secret'),
+            role: 'operator',
+            orgId: 'org-a',
+          },
+        });
+
+        const server = orgRateLimitApp.getHttpServer();
+
+        // 50 requests should succeed or at least not 429
+        for (let i = 0; i < 50; i++) {
+          const res = await request(server)
+            .post('/api/v1/verification')
+            .set('x-api-key', 'key-a-secret')
+            .send({});
+          expect(res.status).not.toBe(429);
+        }
+
+        // 51st request should trip 429
+        const limitedRes = await request(server)
+          .post('/api/v1/verification')
+          .set('x-api-key', 'key-a-secret')
+          .send({});
+        expect(limitedRes.status).toBe(429);
+
+        await cleanupDb();
+      });
+    });
   });
 
   describe('Docs Endpoint', () => {
