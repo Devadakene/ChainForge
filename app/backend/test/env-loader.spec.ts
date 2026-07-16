@@ -20,7 +20,9 @@ describe('loadEnv and Call Path Agreement', () => {
   });
 
   afterEach(() => {
-    existsSyncSpy.mockRestore();
+    if (existsSyncSpy) {
+      existsSyncSpy.mockRestore();
+    }
   });
 
   afterAll(() => {
