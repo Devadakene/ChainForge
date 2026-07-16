@@ -748,8 +748,11 @@ export class ClaimsService {
       where.OR = [
         {
           campaign: {
-            metadata: { path: 'tokenAddress', equals: query.tokenAddress },
+            metadata: { path: ['tokenAddress'], equals: query.tokenAddress },
           },
+        },
+        {
+          metadata: { path: ['tokenAddress'], equals: query.tokenAddress },
         },
       ];
     }
