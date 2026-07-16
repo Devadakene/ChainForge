@@ -744,15 +744,12 @@ export class ClaimsService {
     // Note: Since tokenAddress is not a direct field, we filter by checking metadata
     // This is a simplified approach - in production, tokenAddress should be a direct field
     if (query.tokenAddress) {
-      // Check if either claim or campaign metadata contains the token address
+      // Check if campaign metadata contains the token address
       where.OR = [
         {
           campaign: {
             metadata: { path: ['tokenAddress'], equals: query.tokenAddress },
           },
-        },
-        {
-          metadata: { path: ['tokenAddress'], equals: query.tokenAddress },
         },
       ];
     }
