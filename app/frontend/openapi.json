@@ -2050,6 +2050,21 @@
         ]
       }
     },
+    "/api/v1/test-error/service-unavailable": {
+      "get": {
+        "operationId": "TestErrorController_getServiceUnavailable_v1",
+        "parameters": [],
+        "responses": {
+          "503": {
+            "description": "Service unavailable error triggered."
+          }
+        },
+        "summary": "Trigger a ServiceUnavailableException",
+        "tags": [
+          "Test Error"
+        ]
+      }
+    },
     "/api/v1/test-error/not-found": {
       "get": {
         "operationId": "TestErrorController_getNotFound_v1",
