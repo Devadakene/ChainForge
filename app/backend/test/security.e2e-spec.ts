@@ -1,4 +1,4 @@
-import { INestApplication, VersioningType } from '@nestjs/common';
+import { Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -12,6 +12,8 @@ import {
   createHelmetMiddleware,
   createRateLimiter,
 } from '../src/common/security/security.module';
+import { RedisService } from '@liaoliaots/nestjs-redis';
+import RedisMock from 'ioredis-mock';
 
 type TestAppOptions = {
   enableDocs: boolean;
@@ -43,7 +45,7 @@ const createTestApp = async ({ enableDocs }: TestAppOptions) => {
   app.use(createHelmetMiddleware(configService));
   app.use(createCorsOriginValidator(configService));
   app.enableCors(buildCorsOptions(configService));
-  app.use(createRateLimiter(configService));
+  app.use(createRateLimiter(configService, app.get(RedisService)));
 
   if (enableDocs) {
     const swaggerConfig = new DocumentBuilder()
@@ -175,6 +177,7 @@ describe('Security (e2e)', () => {
     let now = initialNow;
     let nowSpy: jest.SpyInstance;
     let rateLimitApp: INestApplication;
+    let mockRedisClient: any;
 
     beforeEach(async () => {
       process.env.API_RATE_LIMIT = '2';
@@ -185,6 +188,10 @@ describe('Security (e2e)', () => {
       now = initialNow;
       nowSpy = jest.spyOn(Date, 'now').mockImplementation(() => now);
       rateLimitApp = await createTestApp({ enableDocs: true });
+
+      mockRedisClient = new RedisMock();
+      const redisService = rateLimitApp.get(RedisService);
+      jest.spyOn(redisService, 'getOrThrow').mockReturnValue(mockRedisClient);
     });
 
     afterEach(async () => {
@@ -195,6 +202,8 @@ describe('Security (e2e)', () => {
       process.env.THROTTLE_TTL = '60000';
       process.env.CORS_ORIGINS = 'http://localhost:3000';
       process.env.CORS_ALLOW_CREDENTIALS = 'false';
+      delete process.env.RATE_LIMIT_LIMIT;
+      delete process.env.RATE_LIMIT_WINDOW_MS;
     });
 
     it('should rate limit, include retry headers, and reset after the window passes', async () => {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { ConfigService } from '@nestjs/config';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
@@ -91,6 +91,7 @@ const buildHelmetOptions = (config: ConfigService): HelmetOptions => {
             objectSrc: ["'none'"],
             mediaSrc: ["'self'"],
             frameSrc: ["'none'"],
+            reportUri: '/api/v1/csp-report',
           },
         }
       : false,
@@ -186,31 +187,22 @@ export const createCorsOriginValidator = (
   };
 };
 
-export const createRateLimiter = (config: ConfigService): RequestHandler => {
+export const createRateLimiter = (
+  config: ConfigService,
+  redisService?: RedisService,
+): RequestHandler => {
+  const logger = new Logger('RateLimiter');
+
   const windowMs = parseNumber(
-    config.get<string>('THROTTLE_TTL'),
+    config.get<string>('RATE_LIMIT_WINDOW_MS') ?? config.get<string>('THROTTLE_TTL'),
     DEFAULT_RATE_LIMIT_WINDOW_MS,
   );
   const limit = parseNumber(
-    config.get<string>('API_RATE_LIMIT'),
+    config.get<string>('RATE_LIMIT_LIMIT') ?? config.get<string>('API_RATE_LIMIT'),
     DEFAULT_RATE_LIMIT,
   );
 
-  const store = new Map<string, { count: number; resetTimeMs: number }>();
-  let lastCleanupMs = 0;
-
-  const cleanupExpiredEntries = (now: number) => {
-    if (now - lastCleanupMs < windowMs) {
-      return;
-    }
-
-    lastCleanupMs = now;
-    for (const [key, entry] of store) {
-      if (entry.resetTimeMs <= now) {
-        store.delete(key);
-      }
-    }
-  };
+  const windowSeconds = Math.max(Math.ceil(windowMs / 1000), 1);
 
   return async (req: Request, res: Response, next: NextFunction) => {
     if (isRateLimitExempt(req)) {
@@ -285,22 +277,69 @@ export const createRateLimiter = (config: ConfigService): RequestHandler => {
       store.set(key, entry);
     }
 
-    entry.count += 1;
+    const now = Date.now();
+    const minTimestamp = now - windowMs;
+    const uniqueMember = `${now}:${Math.random().toString(36).substring(2, 15)}`;
 
-    const remaining = Math.max(limit - entry.count, 0);
-    const resetSeconds = Math.max(
-      Math.ceil((entry.resetTimeMs - now) / 1000),
-      0,
-    );
+    try {
+      if (!redisService) {
+        throw new Error('RedisService is not configured/available');
+      }
 
-    res.setHeader('RateLimit-Limit', limit.toString());
-    res.setHeader('RateLimit-Remaining', remaining.toString());
-    res.setHeader('RateLimit-Reset', resetSeconds.toString());
+      const client = redisService.getOrThrow();
 
-    if (entry.count > limit) {
-      res.setHeader('Retry-After', resetSeconds.toString());
-      res.status(429).send('Too many requests, please try again later.');
-      return;
+      // Execute MULTI pipeline to keep header reads consistent
+      const multi = client.multi();
+      multi.zremrangebyscore(key, '-inf', minTimestamp);
+      multi.zadd(key, now, uniqueMember);
+      multi.zrange(key, 0, 0, 'WITHSCORES');
+      multi.zcard(key);
+      multi.expire(key, windowSeconds);
+
+      const results = await multi.exec();
+      if (!results) {
+        throw new Error('Redis multi transaction execution returned null');
+      }
+
+      const zrangeResult = results[2];
+      const zcardResult = results[3];
+
+      const zrangeRes = Array.isArray(zrangeResult) ? (zrangeResult[1] as string[]) : undefined;
+      const zcardRes = Array.isArray(zcardResult) ? (zcardResult[1] as number) : undefined;
+
+      const count = typeof zcardRes === 'number' ? zcardRes : 1;
+
+      // ZRANGE WITHSCORES returns: [member1, score1, member2, score2, ...]
+      // The oldest timestamp is the score of the first entry, i.e., index 1
+      let oldestTimestamp = now;
+      if (zrangeRes && zrangeRes.length >= 2) {
+        const parsed = Number(zrangeRes[1]);
+        if (!isNaN(parsed)) {
+          oldestTimestamp = parsed;
+        }
+      }
+
+      const remaining = Math.max(limit - count, 0);
+      const resetSeconds = Math.max(
+        Math.ceil((oldestTimestamp + windowMs - now) / 1000),
+        0,
+      );
+
+      res.setHeader('RateLimit-Limit', limit.toString());
+      res.setHeader('RateLimit-Remaining', remaining.toString());
+      res.setHeader('RateLimit-Reset', resetSeconds.toString());
+
+      if (count > limit) {
+        res.setHeader('Retry-After', resetSeconds.toString());
+        res.status(429).send('Too many requests, please try again later.');
+        return;
+      }
+    } catch (err) {
+      logger.warn(
+        `Redis rate limiter failed, failing open: ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      );
     }
 
     next();
@@ -316,5 +355,8 @@ export const createRateLimiter = (config: ConfigService): RequestHandler => {
  * If cookie-based session management or any browser-managed credentials are introduced
  * in the future, CSRF protection middleware MUST be implemented.
  */
-@Module({})
+@Module({
+  imports: [LoggerModule],
+  controllers: [CspReportController],
+})
 export class SecurityModule {}
