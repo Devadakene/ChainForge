@@ -7,8 +7,6 @@ import {
   OnchainOperationType,
 } from './interfaces/onchain-job.interface';
 import { LoggerService } from '../logger/logger.service';
-import { ONCHAIN_ADAPTER_TOKEN } from './onchain.adapter';
-import type { OnchainAdapter } from './onchain.adapter';
 
 export interface CreateClaimJobParams {
   claimId: string;
