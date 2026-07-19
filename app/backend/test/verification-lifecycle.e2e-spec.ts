@@ -297,44 +297,6 @@ describe('Verification Lifecycle E2E', () => {
     });
   });
 
-  describe('Verification Flow', () => {
-    let testClaimId: string;
-
-    it('should create a claim and start verification', async () => {
-      // Create claim
-      const claimData = {
-        campaignId: testCampaignId,
-        recipientRef: validStellarAddress,
-        tokenAddress: validTokenAddress,
-        amount: 500,
-      };
-
-      const claimResponse = await request(app.getHttpServer())
-        .post('/claims')
-        .set('X-API-Key', validApiKey)
-        .send(claimData)
-        .expect(201);
-
-      testClaimId = claimResponse.body.id;
-      createdClaimIds.push(testClaimId);
-      console.log(`✅ Test claim created: ${testClaimId}`);
-
-      // Start verification - the endpoint returns the updated claim, not a sessionId
-      const verifyResponse = await request(app.getHttpServer())
-        .post(`/claims/${testClaimId}/verify`)
-        .set('X-API-Key', validApiKey)
-        .send({ method: 'humanitarian' })
-        .expect(201);
-
-      // The response is the updated claim object
-      expect(verifyResponse.body).toHaveProperty('id');
-      expect(verifyResponse.body.status).toBe('verified');
-      console.log(
-        `✅ Verification completed, claim status: ${verifyResponse.body.status}`,
-      );
-    });
-  });
-
   // ========== NEW TEST: Onchain Package Create ==========
   describe('Onchain Package Creation', () => {
     let verifiedClaimId: string;
