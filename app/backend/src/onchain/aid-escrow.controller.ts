@@ -27,7 +27,7 @@ import {
   BatchCreateAidPackagesDto,
 } from './dto/aid-escrow.dto';
 import { SorobanErrorMapper } from './utils/soroban-error.mapper';
-import {
+import type {
   CreateAidPackageResult,
   BatchCreateAidPackagesResult,
   ClaimAidPackageResult,

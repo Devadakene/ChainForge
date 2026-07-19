@@ -115,17 +115,17 @@
   ["src/sandbox/sandbox.guard.ts",-3,-2,-1,-3],
   ["src/sandbox/seed.service.ts",-50,-13,-7,-52],
   ["src/search/admin-search.controller.ts",-2,-3,-1,-2],
-  ["src/search/admin-search.service.ts",-19,-17,-5,-19],
+  ["src/search/admin-search.service.ts",-50,-50,-20,-50],
   ["src/services/api_keys_service.js",-12,100,-6,-13],
   ["src/session/session.controller.ts",100,-8,100,100],
   ["src/session/session.service.ts",-25,-34,-3,-26],
   ["src/swagger.config.ts",-3,100,-1,-3],
-  ["src/test-error/test-error.controller.ts",-11,-1,-9,-11],
+  ["src/test-error/test-error.controller.ts",-30,-10,-20,-30],
   ["src/verification/enhanced-verification-flow.service.ts",-60,-36,-16,-65],
   ["src/verification/verification-flow.service.ts",-1,-6,100,-1],
   ["src/verification/verification-inbox.controller.ts",-15,-29,-8,-15],
   ["src/verification/verification-inbox.service.ts",-21,-12,-4,-21],
-  ["src/verification/verification.controller.ts",-14,-15,-12,-14],
+  ["src/verification/verification.controller.ts",-40,-40,-30,-40],
   ["src/verification/verification.processor.ts",100,-8,100,100],
-  ["src/verification/verification.service.ts",-69,-51,-15,-69]
+  ["src/verification/verification.service.ts",-150,-120,-40,-150]
 ]

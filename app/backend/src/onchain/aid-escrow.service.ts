@@ -1,6 +1,7 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { OnchainAdapter, ONCHAIN_ADAPTER_TOKEN } from './onchain.adapter';
+import { ONCHAIN_ADAPTER_TOKEN } from './onchain.adapter';
+import type { OnchainAdapter } from './onchain.adapter';
 import {
   CreateAidPackageDto,
   BatchCreateAidPackagesDto,

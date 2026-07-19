@@ -15,9 +15,11 @@ import { ClaimReceiptDto, SendReceiptShareDto } from './dto/claim-receipt.dto';
 import { ExportClaimsQueryDto } from './dto/export-claims.dto';
 import { ClaimStatus, Prisma } from '@prisma/client';
 import {
+  ONCHAIN_ADAPTER_TOKEN,
+} from '../onchain/onchain.adapter';
+import type {
   OnchainAdapter,
   DisburseResult,
-  ONCHAIN_ADAPTER_TOKEN,
 } from '../onchain/onchain.adapter';
 import { LoggerService } from '../logger/logger.service';
 import { MetricsService } from '../observability/metrics/metrics.service';

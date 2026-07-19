@@ -1,7 +1,8 @@
 import { Module, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
-import { OnchainAdapter, ONCHAIN_ADAPTER_TOKEN } from './onchain.adapter';
+import { ONCHAIN_ADAPTER_TOKEN } from './onchain.adapter';
+import type { OnchainAdapter } from './onchain.adapter';
 export { ONCHAIN_ADAPTER_TOKEN };
 import { MockOnchainAdapter } from './onchain.adapter.mock';
 import { SorobanAdapter } from './soroban.adapter';

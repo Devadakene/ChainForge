@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import type { OnchainAdapter } from './onchain.adapter';
 import {
-  OnchainAdapter,
   InitEscrowParams,
   InitEscrowResult,
   CreateClaimParams,

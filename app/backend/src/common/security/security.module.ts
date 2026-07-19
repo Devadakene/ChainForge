@@ -277,7 +277,6 @@ export const createRateLimiter = (
       store.set(key, entry);
     }
 
-    const now = Date.now();
     const minTimestamp = now - windowMs;
     const uniqueMember = `${now}:${Math.random().toString(36).substring(2, 15)}`;
 

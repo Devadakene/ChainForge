@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import type { OnchainAdapter } from './onchain.adapter';
 import {
-  OnchainAdapter,
   ONCHAIN_ADAPTER_TOKEN,
   AidPackage,
   InitEscrowParams,

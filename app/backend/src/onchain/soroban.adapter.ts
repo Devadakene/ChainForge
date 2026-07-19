@@ -10,8 +10,8 @@ import {
   BASE_FEE,
   xdr,
 } from '@stellar/stellar-sdk';
+import type { OnchainAdapter } from './onchain.adapter';
 import {
-  OnchainAdapter,
   InitEscrowParams,
   InitEscrowResult,
   CreateClaimParams,

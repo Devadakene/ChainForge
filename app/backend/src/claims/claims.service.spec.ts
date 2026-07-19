@@ -5,10 +5,9 @@ import { ClaimsService } from './claims.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { BudgetService } from '../common/budget/budget.service';
 import {
-  OnchainAdapter,
   ONCHAIN_ADAPTER_TOKEN,
 } from '../onchain/onchain.adapter';
-import type { DisburseParams } from '../onchain/onchain.adapter';
+import type { OnchainAdapter, DisburseParams } from '../onchain/onchain.adapter';
 import { LoggerService } from '../logger/logger.service';
 import { MetricsService } from '../observability/metrics/metrics.service';
 import { AuditService } from '../audit/audit.service';

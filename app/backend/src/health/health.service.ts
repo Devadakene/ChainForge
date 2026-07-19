@@ -4,9 +4,9 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoggerService } from '../logger/logger.service';
 import {
-  OnchainAdapter,
   ONCHAIN_ADAPTER_TOKEN,
 } from '../onchain/onchain.adapter';
+import type { OnchainAdapter } from '../onchain/onchain.adapter';
 
 type CheckStatus = 'up' | 'down' | 'skipped';
 

@@ -8,11 +8,11 @@ import {
 } from './interfaces/onchain-job.interface';
 import {
   ONCHAIN_ADAPTER_TOKEN,
-  OnchainAdapter,
   InitEscrowResult,
   CreateClaimResult,
   DisburseResult,
 } from './onchain.adapter';
+import type { OnchainAdapter } from './onchain.adapter';
 
 import { DlqService } from '../jobs/dlq.service';
 import { MetricsService } from '../observability/metrics/metrics.service';

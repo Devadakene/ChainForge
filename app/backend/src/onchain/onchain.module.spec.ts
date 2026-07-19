@@ -5,7 +5,7 @@ import {
   ONCHAIN_ADAPTER_TOKEN,
   createOnchainAdapter,
 } from './onchain.module';
-import { OnchainAdapter } from './onchain.adapter';
+import type { OnchainAdapter } from './onchain.adapter';
 import { MockOnchainAdapter } from './onchain.adapter.mock';
 import { SorobanAdapter } from './soroban.adapter';
 import { PrismaModule } from '../prisma/prisma.module';
