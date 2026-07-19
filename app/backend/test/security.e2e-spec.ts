@@ -1,11 +1,10 @@
-import { Logger, INestApplication, VersioningType } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import request from 'supertest';
 import crypto from 'node:crypto';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { AppModule } from '../src/app.module';
 import {
   buildCorsOptions,
   createCorsOriginValidator,
@@ -312,8 +311,12 @@ describe('Security (e2e)', () => {
 
         await cleanupDb();
 
-        await prisma.organization.create({ data: { id: 'org-a', name: 'Org A' } });
-        await prisma.organization.create({ data: { id: 'org-b', name: 'Org B' } });
+        await prisma.organization.create({
+          data: { id: 'org-a', name: 'Org A' },
+        });
+        await prisma.organization.create({
+          data: { id: 'org-b', name: 'Org B' },
+        });
 
         await prisma.apiKey.create({
           data: {
@@ -369,7 +372,9 @@ describe('Security (e2e)', () => {
 
         await cleanupDb();
 
-        await prisma.organization.create({ data: { id: 'org-a', name: 'Org A' } });
+        await prisma.organization.create({
+          data: { id: 'org-a', name: 'Org A' },
+        });
         await prisma.apiKey.create({
           data: {
             id: 'key-a',
